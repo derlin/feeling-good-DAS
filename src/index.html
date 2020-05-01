@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DAS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="style.css">
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+
+    <h1>The Dysfunctional Attitude Scale (DAS), revised</h1>
+    <h2>What is it ?</h2>
+    <p>
+        the <i>Dysfunctional Attitude Scale</i> (DAS, Weisman and Beck, 1978) is a list of one hundred self-defeating
+        attitudes that commonly occur in individuals predisposed to emotional disorders.
+        The form below is a slightly revised version of DAS, which is proposed by David D. Burns in his book
+        <a href="https://feelinggood.com/books/"><i>Feeling Good: The New Mood Therapy.</i></a>.
+        This should help you pinpoint some of the self-defeating beliefs, or silent assumptions, that are at the core of
+        your depressive episodes.
+    </p>
+    <h2>How do I answer ?</h2>
+    <p>
+        Answering the test is quite simple. After each of the thirty-five attitudes, put a check in the column that
+        represents your estimate of how you think <i>most</i> of the time. Be sure to choose only one answer for each
+        attitude.
+        Because we are all different, there is no “right” or “wrong” answer to any statement. To decide whether a given
+        attitude is typical of your own philosophy, recall how you look at things <i>most of the time</i>.
+    </p>
+    <table id="form">
+        <thead>
+        <tr>
+            <th class="rheader"></th>
+            <th class="rheader"></th>
+            <!--<th class="rheader">Agree Strongly</th>-->
+            <!--<th class="rheader">Agree Slightly</th>-->
+            <!--<th class="rheader">Neutral</th>-->
+            <!--<th class="rheader">Disagree Slightly</th>-->
+            <!--<th class="rheader">Disagree Strongly</th>-->
+            <th class="rheader">+&nbsp;+</th>
+            <th class="rheader">+</th>
+            <th class="rheader">Neutral</th>
+            <th class="rheader">-</th>
+            <th class="rheader">-&nbsp;-</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(q, index) in questions">
+            <td class="n">{{index + 1}}</td>
+            <td class="q">{{q}}</td>
+            <td class="r" v-for="n in 5"><input type="radio" v-bind:name="index" v-bind:value="n - 3"></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>
+        <button style="margin-top: 15px" onclick="app.validate()">Compute Scores</button>
+    </p>
+    <div v-if="validated">
+        <table id="scores" ref="scores">
+            <tr v-for="c in scores" :style="computeStyle(c.value)">
+                <td>{{c.name}}</td>
+                <td>{{c.value}}</td>
+            </tr>
+        </table>
+        <div id="descriptions">
+            <p v-for="(c, i) in scores">
+                <span>{{c.name}} ({{c.value}})</span> {{descriptions[i]}}
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<div id="footer">
+    Made with ♥ by <a href="https://derlin.ch" target="_blank">Derlin</a>
+</div>
+
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript">
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            questions: formData,
+            descriptions: descriptions,
+            scores: categories.map(function (c) {
+                return {name: c, value: 0}
+            }),
+            validated: false,
+        },
+        methods: {
+            validate() {
+                let answers = Array(this.questions.length).fill(0);
+                // get selected radios
+                for (const elt of document.querySelectorAll('input[type=radio]:checked')) {
+                    answers[parseInt(elt.name)] = parseInt(elt.value);
+                }
+                // compute score for each category (groups of 5 consecutive questions)
+                for (let i = 0; i < this.scores.length; i++) {
+                    this.scores[i].value = answers.slice(i * 5, (i + 1) * 5).reduce((a, b) => a + b);
+                }
+                this.validated = true;
+            },
+            computeStyle(val) { // compute color for each row of the scores table
+                let opacity = Math.abs(val / 10);
+                return {
+                    backgroundColor: val === 0 ? 'transparent' :
+                        val < 0 ? `rgb(241, 99, 88, ${opacity})` : `rgb(0, 255, 0, ${opacity})`
+                }
+            }
+        },
+        watch: {
+            validated: function () {
+                setTimeout(function () {
+                    console.log(app.$refs.scores);
+                    // see https://stackoverflow.com/a/36180398
+                    app.$refs.scores.scrollIntoView({behavior: 'smooth', block: 'start'})
+                }, 100);
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+body {
+    position: relative;
+}
+
+#app {
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    padding: 20px;
+    font-family: Roboto;
+}
+
+#footer {
+    position: fixed;
+    background: white;
+    padding: 10px 20px;
+    left: 0; right: 0;
+    bottom: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    margin-top: 10px;
+    text-align: justify;
+}
+
+#form {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.r, .rheader {
+    text-align: center;
+}
+
+th, td {
+    padding: 6px 9px;
+}
+
+tbody tr:hover {
+    background: #eee;
+}
+
+thead th {
+    font-size: .9em;
+    font-weight: normal;
+    font-style: italic;
+}
+
+#form thead, #form {
+    border-bottom: 1px solid #aaa;
+}
+
+#form td:first-child {
+    vertical-align: top;
+    text-align: right;
+    font-size: .7em;
+}
+
+#scores {
+    margin: 10px auto;
+    border-collapse: collapse;
+}
+
+#scores tr {
+    border: 1px solid black;
+}
+
+table#scores td:first-child {
+    min-width: 10vw;
+}
+
+#descriptions span {
+    font-weight: bold;
+    display: inline-block;
+    padding-right: 1em;
+}
+
+#descriptions > p {
+    white-space: pre-line; /* render \n */
+}
+
+
+button {
+    all: initial;
+    display: inline-block;
+    padding: 0.3em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 1.2em;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #FFFFFF;
+    background-color: #4eb5f1;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: #4095c6;
+}
+
+@media all and (max-width: 30em) {
+    button {
+        display: block;
+        margin: 0.2em auto;
+    }
+}
+
